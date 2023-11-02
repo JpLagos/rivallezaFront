@@ -1,4 +1,5 @@
 import React from 'react';
+import '../styles/styles.css';
 
 function ContactCard({ contact, onMarkAttendance, onDeleteContact }) {
     return (
@@ -6,14 +7,9 @@ function ContactCard({ contact, onMarkAttendance, onDeleteContact }) {
             <h2>{contact.nombre}</h2>
             <p>RUT: {contact.rut}</p>
             <p>Número: {contact.numero}</p>
-            <label>
-                Asistencia:
-                <input
-                    type="checkbox"
-                    checked={contact.asistencia}
-                    onChange={() => onMarkAttendance(contact.id)}
-                />
-            </label>
+            <p>Número de Asistencias: {contact.asistencias}</p>
+
+            <button onClick={() => onMarkAttendance(contact.rut)}>Agregar Asistencia</button>
             <button onClick={() => onDeleteContact(contact.rut)}>Eliminar</button>
         </div>
     );

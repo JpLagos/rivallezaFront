@@ -25,22 +25,6 @@ function ContactForm({ newContact, onInputChange, onAddContact }) {
                 value={newContact.numero}
                 onChange={onInputChange}
             />
-            <label>
-                Asistencia:
-                <input
-                    type="checkbox"
-                    name="asistencia"
-                    checked={newContact.asistencia}
-                    onChange={() =>
-                        onInputChange({
-                            target: {
-                                name: 'asistencia',
-                                value: !newContact.asistencia,
-                            },
-                        })
-                    }
-                />
-            </label>
             <button onClick={onAddContact}>Agregar Contacto</button>
         </div>
     );

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ContactCard from './ContactCard';
 import ContactForm from './ContactForm';
+import '../styles/styles.css';
 
 const serverUrl = 'http://localhost:3000';
 function ContactList() {
@@ -9,8 +10,10 @@ function ContactList() {
         rut: '',
         nombre: '',
         numero: '',
-        asistencia: false,
+        asistencias: 0,
     });
+
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         // Lógica para obtener la lista de contactos desde la API al cargar el componente
@@ -21,31 +24,43 @@ function ContactList() {
                 }
                 return response.json();
             })
-            .then((data) => setContacts(data))
-            .catch((error) => console.error('Error:', error));
+            .then((data) => {
+                console.log(data)
+                setContacts(data)
+                setIsLoading(false)
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                setIsLoading(false); // En caso de error, también indicamos que se ha cargado
+            });
     }, []);
 
-    const handleMarkAttendance = (id) => {
-        // Lógica para marcar la asistencia de un contacto mediante una solicitud PUT
-        const updatedContacts = contacts.map((contact) => {
-            if (contact.id === id) {
-                contact.asistencia = !contact.asistencia;
-                fetch(`${serverUrl}/api/contacts/${contact.rut}/update-asistencia`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ nuevaAsistencia: contact.asistencia ? 1 : 0 }),
-                })
-                    .then((response) => response.json())
-                    .then((data) => console.log(data))
-                    .catch((error) => console.error('Error:', error));
-            }
-            return contact;
-        });
-        setContacts(updatedContacts);
-    };
+    const handleMarkAttendance = (rut) => {
+        // Lógica para agregar una entrada al contacto mediante una solicitud PUT
+        fetch(`${serverUrl}/api/contacts/${rut}/update-asistencias`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ nuevaAsistencias: 1 }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log("datos", data); // Verifica que la respuesta contenga el número de asistencias actualizado
 
+                // Actualiza el estado utilizando una función de actualización
+                setContacts((prevContacts) => {
+                    return prevContacts.map((contact) => {
+                        if (contact.rut === rut) {
+                            // Actualiza el campo de asistencias del contacto correspondiente
+                            return { ...contact, asistencias: data.asistencias };
+                        }
+                        return contact;
+                    });
+                });
+            })
+            .catch((error) => console.error('Error:', error));
+    };
     const handleDeleteContact = (rut) => {
         // Lógica para eliminar un contacto mediante una solicitud DELETE
         if (window.confirm('¿Estás seguro de que deseas eliminar este contacto?')) {
@@ -67,9 +82,10 @@ function ContactList() {
         setNewContact({ ...newContact, [name]: value });
     };
 
+
     const handleAddContact = () => {
         // Lógica para agregar un nuevo contacto mediante una solicitud POST
-        fetch(`${serverUrl}/api/contacts`, {
+        fetch(`${serverUrl}/contacts`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -79,33 +95,43 @@ function ContactList() {
             .then((response) => response.json())
             .then((data) => {
                 console.log(data);
+                // Inicializa la propiedad asistencias en 0 para el nuevo contacto
+                data.asistencias = 0;
                 setContacts([...contacts, data]);
                 setNewContact({
                     rut: '',
                     nombre: '',
                     numero: '',
-                    asistencia: false,
+                    asistencias: 0, // Inicializar asistencias en 0
                 });
             })
-            .catch((error) => console.error('Error:', error));
+            .catch((error) => {
+                console.error('Error:', error)
+                console.log('Error', error)
+                alert(`Error: ${error.message}`)
+            })
     };
 
     return (
         <div>
-            <h1>Lista de Contactos</h1>
+            <h1>Lista de Clientes</h1>
             <ContactForm
                 newContact={newContact}
                 onInputChange={handleInputChange}
                 onAddContact={handleAddContact}
             />
-            {contacts.map((contact) => (
-                <ContactCard
-                    key={contact.id}
-                    contact={contact}
-                    onMarkAttendance={handleMarkAttendance}
-                    onDeleteContact={handleDeleteContact}
-                />
-            ))}
+            {isLoading ? (
+                <p>Cargando contactos...</p>
+            ) : (
+                contacts.map((contact) => (
+                    <ContactCard
+                        key={contact.id || contact.rut}
+                        contact={contact}
+                        onMarkAttendance={handleMarkAttendance}
+                        onDeleteContact={handleDeleteContact}
+                    />
+                ))
+            )}
         </div>
     );
 }
