@@ -1,14 +1,30 @@
-import React from 'react';
-import './App.css'; // Importa los estilos de tu aplicación
-
-import ContactList from './components/ContactList'; // Importa el componente ContactList
+import React, { useState } from 'react';
+import './App.css';
+import LoginForm from './components/LoginForm';
+import ContactList from './components/ContactList';
 
 function App() {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    const handleLogin = () => {
+        setIsLoggedIn(true);
+    };
+
+    const handleLogout = () => {
+        setIsLoggedIn(false);
+    };
+
     return (
         <div className="App">
             <header className="App-header">
-                {/* Renderiza el componente ContactList */}
-                <ContactList />
+                {isLoggedIn ? (
+                    <>
+                        <ContactList />
+                        <button onClick={handleLogout}>Cerrar Sesión</button>
+                    </>
+                ) : (
+                    <LoginForm onLogin={handleLogin} />
+                )}
             </header>
         </div>
     );

@@ -9,8 +9,8 @@ function ContactCard({ contact, onMarkAttendance, onDeleteContact }) {
             <p>Número: {contact.numero}</p>
             <p>Número de Asistencias: {contact.asistencias}</p>
 
-            <button onClick={() => onMarkAttendance(contact.rut)}>Agregar Asistencia</button>
-            <button onClick={() => onDeleteContact(contact.rut)}>Eliminar</button>
+            <button className="contact-buttom" onClick={() => onMarkAttendance(contact.rut)}>Agregar Asistencia</button>
+            <button className="contact-buttom" onClick={() => onDeleteContact(contact.rut)}>Eliminar</button>
         </div>
     );
 }

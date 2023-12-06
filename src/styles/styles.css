@@ -1,19 +1,93 @@
-body {
-    background-color: #282c34;
-    color: white;
-    padding: 40px;
-    font-family: Arial;
-    text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Agbalumo&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: 100;
+    color: #010D4C;
+    background-color: #FBFEFF
+}
+
+.Contact-container {
     display: flex;
     justify-content: center;
-    align-items: center;
     flex-direction: column;
+    align-items: center;
+    height: 50vh;
+    gap: 4rem;
+}
+
+.main-header {
+    color: #F5462C;
+    background: linear-gradient(to right, #F5462C, #FF7E5F);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.contact-form h2 {
+    color: #010D4C
+}
+
+.contact-form input {
+    padding: 1rem;
+    border: 1px solid #010D4C;
+    border-radius: 5px;
+    outline: none;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.input-container {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.contact-form button {
+    padding: 0.5rem;
+    border: 1px solid #010D4C;
+    border-radius: 5px;
+    outline: none;
+    background-color: rgba(255, 255, 255, 0.5);
+    color: #010D4C;
+    cursor: pointer;
+    width: 20%;
+    margin: 0 auto;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+    /* Transiciones para suavizar cambios */
+}
+
+.contact-form button:hover {
+    background-color: rgba(245, 70, 44, 0.8);
+    color: #FFF;
+    /* Cambiamos el color del texto a blanco crema al hacer hover */
+}
+
+.separator {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 70%;
+    height: 10vh;
 }
 
 .contact-card {
-    background-color: #282c34;
-    color: white;
-    padding: 40px;
-    font-family: Arial;
-    text-align: center;
+    width: 30%;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    border: 1px solid #010D4C;
+    border-radius: 5px;
+}
+
+.contact-buttom {
+    margin: 0 0.5rem 0 0;
+    padding: 0.2rem;
 }

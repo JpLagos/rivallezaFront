@@ -17,7 +17,9 @@ function ContactList() {
 
     useEffect(() => {
         // Lógica para obtener la lista de contactos desde la API al cargar el componente
-        fetch(`${serverUrl}/api/contacts`)
+        fetch(`${serverUrl}/api/contacts`, {
+            credentials: 'include',
+        })
             .then((response) => {
                 if (!response.ok) {
                     throw new Error(`Error en la solicitud: ${response.status}`);
@@ -39,6 +41,7 @@ function ContactList() {
         // Lógica para agregar una entrada al contacto mediante una solicitud PUT
         fetch(`${serverUrl}/api/contacts/${rut}/update-asistencias`, {
             method: 'PUT',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -66,6 +69,7 @@ function ContactList() {
         if (window.confirm('¿Estás seguro de que deseas eliminar este contacto?')) {
             fetch(`${serverUrl}/api/contacts/${rut}`, {
                 method: 'DELETE',
+                credentials: 'include',
             })
                 .then((response) => response.json())
                 .then((data) => {
@@ -85,8 +89,9 @@ function ContactList() {
 
     const handleAddContact = () => {
         // Lógica para agregar un nuevo contacto mediante una solicitud POST
-        fetch(`${serverUrl}/contacts`, {
+        fetch(`${serverUrl}/api/contacts`, {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -113,25 +118,27 @@ function ContactList() {
     };
 
     return (
-        <div>
-            <h1>Lista de Clientes</h1>
+        <div className="Contact-container">
+            <h1 className="main-header">Control de asistencia</h1>
             <ContactForm
                 newContact={newContact}
                 onInputChange={handleInputChange}
                 onAddContact={handleAddContact}
             />
-            {isLoading ? (
-                <p>Cargando contactos...</p>
-            ) : (
-                contacts.map((contact) => (
-                    <ContactCard
-                        key={contact.id || contact.rut}
-                        contact={contact}
-                        onMarkAttendance={handleMarkAttendance}
-                        onDeleteContact={handleDeleteContact}
-                    />
-                ))
-            )}
+            <div className="separator">
+                {isLoading ? (
+                    <p>Cargando contactos...</p>
+                ) : (
+                    contacts.map((contact) => (
+                        <ContactCard
+                            key={contact.id || contact.rut}
+                            contact={contact}
+                            onMarkAttendance={handleMarkAttendance}
+                            onDeleteContact={handleDeleteContact}
+                        />
+                    ))
+                )}
+            </div>
         </div>
     );
 }
